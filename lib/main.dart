@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:viva_aranzazu/injection_container.dart';
-import 'package:viva_aranzazu/widgets/search_page.dart';
+import 'package:viva_aranzazu/widgets/dashboard_page.dart';
 
 void main() {
   initKiwi();
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.red.shade600,
         accentColor: Colors.redAccent.shade400,
       ),
-      home: SearchPage(),
+      home: DashboardPage(),
     );
   }
 }

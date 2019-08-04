@@ -1,47 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kiwi/kiwi.dart' as kiwi;
-import 'package:viva_aranzazu/model/search.dart';
-import 'package:viva_aranzazu/bloc/search/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:viva_aranzazu/widgets/search/centered_message.dart';
+import 'package:viva_aranzazu/bloc/search/bloc.dart';
+import 'package:viva_aranzazu/model/search/SearchItem.dart';
 import 'package:viva_aranzazu/widgets/search/ListItemCard.dart';
-
-class SearchPage extends StatefulWidget {
-  _SearchPageState createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
-  final _searchBloc = kiwi.Container().resolve<SearchBloc>();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      builder: (context) => _searchBloc,
-      child: _buildScaffold(),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _searchBloc.dispose();
-  }
-
-  Scaffold _buildScaffold() {
-    return Scaffold(
-        appBar: AppBar(
-//        title: SearchBar(),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {
-            showSearch(context: context, delegate: DataSearch(_searchBloc));
-          },
-        )
-      ],
-    ));
-  }
-}
+import 'package:viva_aranzazu/widgets/search/centered_message.dart';
 
 class DataSearch extends SearchDelegate<String> {
   final _scrollController = ScrollController();
