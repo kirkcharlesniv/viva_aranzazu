@@ -74,15 +74,11 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    print('SEARCH BLOC');
-    print(query);
-
     searchBloc.onSearchInitiated(query, 1);
     return BlocBuilder(
       bloc: searchBloc,
       builder: (BuildContext context, SearchState state) {
         if (state.isInitial) {
-          print('state initial');
           return CenteredMessage(
             message: 'Start searching!',
             icon: Icons.ondemand_video,
@@ -90,17 +86,14 @@ class DataSearch extends SearchDelegate<String> {
         }
 
         if (state.isLoading) {
-          print('state loading');
           return Center(
             child: CircularProgressIndicator(),
           );
         }
 
         if (state.isSuccessful) {
-          print('state success');
           return _buildResultList(state);
         } else {
-          print('state failed');
           return CenteredMessage(
             message: state.error,
             icon: Icons.error_outline,
@@ -175,7 +168,7 @@ class DataSearch extends SearchDelegate<String> {
     return GestureDetector(
       child: ListItemCard(searchItem),
       onTap: () {
-        print('ah sarado');
+        // TODO: add detail view
 //        Navigator.push(
 //          context,
 //          MaterialPageRoute(builder: (_) {

@@ -2,27 +2,25 @@ import 'package:built_collection/built_collection.dart';
 import 'package:viva_aranzazu/model/search.dart';
 import 'package:viva_aranzazu/network/SearchDataSource.dart';
 
-class Repository {
+class SearchRepository {
   SearchDataSource _searchDataSource;
 
   String _lastSearchQuery;
   int _nextPage;
 
-  Repository(this._searchDataSource);
+  SearchRepository(this._searchDataSource);
 
   Future<BuiltList<SearchItem>> searchArticles(String query, int index) async {
     final searchResult =
         await _searchDataSource.searchArticles(query: query, index: index);
     _cacheValues(query: query, nextPage: searchResult.next_page);
     if (searchResult.items.isEmpty) throw NoSearchResultsException();
-    print('IMPORTANT: ${searchResult.next_page}');
     return searchResult.items;
   }
 
   void _cacheValues({String query, int nextPage}) {
     _lastSearchQuery = query;
     _nextPage = nextPage;
-    print('CACHED: $nextPage');
   }
 
   Future<BuiltList<SearchItem>> fetchNextResultPage() async {
