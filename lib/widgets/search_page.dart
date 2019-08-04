@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:kiwi/kiwi.dart' as kiwi;
 import 'package:viva_aranzazu/model/search.dart';
 import 'package:viva_aranzazu/bloc/search/bloc.dart';
-import 'package:viva_aranzazu/bloc/search/search_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:viva_aranzazu/widgets/search/centered_message.dart';
-import 'package:viva_aranzazu/widgets/search/search_bar.dart';
+import 'package:viva_aranzazu/widgets/search/ListItemCard.dart';
 
 class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
@@ -13,7 +12,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final _searchBloc = kiwi.Container().resolve<SearchBloc>();
-  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,39 +29,112 @@ class _SearchPageState extends State<SearchPage> {
 
   Scaffold _buildScaffold() {
     return Scaffold(
-      appBar: AppBar(
-        title: SearchBar(),
-      ),
-      body: BlocBuilder(
-        bloc: _searchBloc,
-        builder: (context, SearchState state) {
-          if (state.isInitial) {
-            print('state initial');
-            return CenteredMessage(
-              message: 'Start searching!',
-              icon: Icons.ondemand_video,
-            );
-          }
+        appBar: AppBar(
+//        title: SearchBar(),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            showSearch(context: context, delegate: DataSearch(_searchBloc));
+          },
+        )
+      ],
+    ));
+  }
+}
 
-          if (state.isLoading) {
-            print('state loading');
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+class DataSearch extends SearchDelegate<String> {
+  final _scrollController = ScrollController();
+  final SearchBloc searchBloc;
+  DataSearch(this.searchBloc);
 
-          if (state.isSuccessful) {
-            print('state success');
-            return _buildResultList(state);
-          } else {
-            print('state failed');
-            return CenteredMessage(
-              message: state.error,
-              icon: Icons.error_outline,
-            );
-          }
+  final recentSearches = [];
+  final searches = ["Aranzazu", "Canonical", "Episcopal"];
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
         },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: AnimatedIcon(
+            icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+        onPressed: () {
+          close(context, null);
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    print('SEARCH BLOC');
+    print(query);
+
+    searchBloc.onSearchInitiated(query, 1);
+    return BlocBuilder(
+      bloc: searchBloc,
+      builder: (BuildContext context, SearchState state) {
+        if (state.isInitial) {
+          print('state initial');
+          return CenteredMessage(
+            message: 'Start searching!',
+            icon: Icons.ondemand_video,
+          );
+        }
+
+        if (state.isLoading) {
+          print('state loading');
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (state.isSuccessful) {
+          print('state success');
+          return _buildResultList(state);
+        } else {
+          print('state failed');
+          return CenteredMessage(
+            message: state.error,
+            icon: Icons.error_outline,
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? recentSearches
+        : searches.where((p) => p.startsWith(query)).toList();
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        onTap: () {
+          showResults(context);
+        },
+        leading: Icon(Icons.search),
+        title: RichText(
+            text: TextSpan(
+                text: suggestionList[index].substring(0, query.length),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
+              TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(color: Colors.grey))
+            ])),
       ),
+      itemCount: suggestionList.length,
     );
   }
 
@@ -74,9 +145,6 @@ class _SearchPageState extends State<SearchPage> {
         itemCount: _calculateListItemCount(state),
         controller: _scrollController,
         itemBuilder: (context, index) {
-//          return index >= state.searchResults.length
-//              ? _buildLoaderListItem()
-//              : _buildVideoListItem(state.searchResults[index]);
           return index >= state.searchResults.length
               ? (state.searchResults.length < 10
                   ? null
@@ -98,14 +166,14 @@ class _SearchPageState extends State<SearchPage> {
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification is ScrollEndNotification &&
         _scrollController.position.extentAfter == 0) {
-      _searchBloc.fetchNextResultPage();
+      searchBloc.fetchNextResultPage();
     }
     return false;
   }
 
   Widget _buildVideoListItem(SearchItem searchItem) {
     return GestureDetector(
-      child: _buildVideoListItemCard(searchItem),
+      child: ListItemCard(searchItem),
       onTap: () {
         print('ah sarado');
 //        Navigator.push(
@@ -117,39 +185,6 @@ class _SearchPageState extends State<SearchPage> {
 //          }),
 //        );
       },
-    );
-  }
-
-  Widget _buildVideoListItemCard(SearchItem article) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image.network(
-                article.thumbnail,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(height: 5),
-            Text(
-              article.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-              ),
-            ),
-            SizedBox(height: 5),
-            Text(
-              article.excerpt,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
