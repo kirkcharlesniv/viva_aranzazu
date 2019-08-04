@@ -8,7 +8,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final DashboardRepository _repository;
   DashboardBloc(this._repository) : super();
 
-  void onSearchInitiated(String query, int index) {
+  void onSearchInitiated(int index) {
     dispatch(DashboardInitiated((b) => b..index = index));
   }
 
@@ -31,33 +31,27 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   Stream<DashboardState> mapSearchInitiated(event) async* {
-    if (event.query.isEmpty) {
-      yield DashboardState.initial();
-    } else {
-      yield DashboardState.loading();
+    yield DashboardState.loading();
 
-      try {
-        final searchResult =
-            await _repository.searchArticles(event.query, event.index);
-        yield DashboardState.success(searchResult);
-      } on SearchError catch (e) {
-        yield DashboardState.failure(e.message);
-      } on NoSearchResultsException catch (e) {
-        yield DashboardState.failure(e.message);
-      }
+    try {
+      final searchResult = await _repository.browseDashboard(event.index);
+      yield DashboardState.success(searchResult);
+    } on MessageError catch (e) {
+      yield DashboardState.failure(e.message);
+    } on NoDashboardResultsException catch (e) {
+      yield DashboardState.failure(e.message);
     }
   }
 
   Stream<DashboardState> mapFetchNextResultPage() async* {
     try {
-      final nextPageResults = await _repository.fetchNextResultPage();
-      yield DashboardState.success(
-          currentState.searchResults + nextPageResults);
+      final nextPageResults = await _repository.fetchNextPage();
+      yield DashboardState.success(currentState.results + nextPageResults);
     } on NoNextPageTokenException catch (_) {
       yield currentState.rebuild((b) => b..hasReachedEndOfResults = true);
-    } on SearchNotInitiatedException catch (e) {
+    } on BrowseNotInitiatedException catch (e) {
       yield DashboardState.failure(e.message);
-    } on SearchError catch (e) {
+    } on MessageError catch (e) {
       yield DashboardState.failure(e.message);
     }
   }

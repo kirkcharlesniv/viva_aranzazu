@@ -22,7 +22,7 @@ class SearchDataSource {
     if (response.statusCode == 200) {
       return SearchResult.fromJson(response.body);
     } else {
-      throw SearchError(json.decode(response.body)['message']);
+      throw MessageError(json.decode(response.body)['message']);
     }
   }
 }

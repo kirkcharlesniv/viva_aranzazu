@@ -42,7 +42,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         final searchResult =
             await _repository.searchArticles(event.query, event.index);
         yield SearchState.success(searchResult);
-      } on SearchError catch (e) {
+      } on MessageError catch (e) {
         yield SearchState.failure(e.message);
       } on NoSearchResultsException catch (e) {
         yield SearchState.failure(e.message);
@@ -58,7 +58,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield currentState.rebuild((b) => b..hasReachedEndOfResults = true);
     } on SearchNotInitiatedException catch (e) {
       yield SearchState.failure(e.message);
-    } on SearchError catch (e) {
+    } on MessageError catch (e) {
       yield SearchState.failure(e.message);
     }
   }

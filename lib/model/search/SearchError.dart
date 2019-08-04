@@ -1,4 +1,4 @@
-class SearchError implements Exception {
+class MessageError implements Exception {
   final String message;
-  SearchError(this.message);
+  MessageError(this.message);
 }

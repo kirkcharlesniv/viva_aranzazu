@@ -9,37 +9,37 @@ class DashboardRepository {
 
   DashboardRepository(this._dashboardDataSource);
 
-  Future<BuiltList<SearchItem>> searchArticles(String query, int index) async {
-    final searchResult =
+  Future<BuiltList<SearchItem>> browseDashboard(int index) async {
+    final result =
         await _dashboardDataSource.browseDashboard(index: index);
-    _cacheValues(nextPage: searchResult.next_page);
-    if (searchResult.items.isEmpty) throw NoSearchResultsException();
-    return searchResult.items;
+    _cacheValues(nextPage: result.next_page);
+    if (result.items.isEmpty) throw NoDashboardResultsException();
+    return result.items;
   }
 
   void _cacheValues({int nextPage}) {
     _nextPage = nextPage;
   }
 
-  Future<BuiltList<SearchItem>> fetchNextResultPage() async {
+  Future<BuiltList<SearchItem>> fetchNextPage() async {
     if (_nextPage == null) {
       throw NoNextPageTokenException();
     }
 
-    final nextPageSearchResult =
+    final nextPageResult =
         await _dashboardDataSource.browseDashboard(index: _nextPage);
 
-    _cacheValues(nextPage: nextPageSearchResult.next_page);
+    _cacheValues(nextPage: nextPageResult.next_page);
 
-    return nextPageSearchResult.items;
+    return nextPageResult.items;
   }
 }
 
-class NoSearchResultsException implements Exception {
+class NoDashboardResultsException implements Exception {
   final message = 'No results';
 }
 
-class SearchNotInitiatedException implements Exception {
+class BrowseNotInitiatedException implements Exception {
   final message = 'Cannot get the next result page without searching first.';
 }
 
