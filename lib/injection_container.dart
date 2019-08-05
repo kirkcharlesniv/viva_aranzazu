@@ -13,7 +13,6 @@ void initKiwi() {
     ..registerFactory((c) => SearchDataSource(c.resolve()))
     ..registerFactory((c) => SearchRepository(c.resolve()))
     ..registerFactory((c) => SearchBloc(c.resolve()))
-    ..registerInstance(http.Client())
     ..registerFactory((c) => DashboardDataSource(c.resolve()))
     ..registerFactory((c) => DashboardRepository(c.resolve()))
     ..registerFactory((c) => DashboardBloc(c.resolve()));

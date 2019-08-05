@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:viva_aranzazu/bloc/search/bloc.dart';
 import 'package:viva_aranzazu/model/search/SearchItem.dart';
-import 'package:viva_aranzazu/widgets/search/ListItemCard.dart';
+import 'package:viva_aranzazu/widgets/templates/ListItemCard.dart';
 import 'package:viva_aranzazu/widgets/search/centered_message.dart';
 
 class DataSearch extends SearchDelegate<String> {

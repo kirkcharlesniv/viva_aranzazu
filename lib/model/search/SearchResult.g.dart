@@ -77,6 +77,7 @@ class _$SearchResult extends SearchResult {
   @override
   final int index;
   @override
+  // ignore: non_constant_identifier_names
   final int next_page;
   @override
   final BuiltList<SearchItem> items;
@@ -84,6 +85,7 @@ class _$SearchResult extends SearchResult {
   factory _$SearchResult([void Function(SearchResultBuilder) updates]) =>
       (new SearchResultBuilder()..update(updates)).build();
 
+  // ignore: non_constant_identifier_names
   _$SearchResult._({this.index, this.next_page, this.items}) : super._();
 
   @override
@@ -126,9 +128,12 @@ class SearchResultBuilder
   int get index => _$this._index;
   set index(int index) => _$this._index = index;
 
+  // ignore: non_constant_identifier_names
   int _next_page;
+  // ignore: non_constant_identifier_names
   int get next_page => _$this._next_page;
-  set next_page(int next_page) => _$this._next_page = next_page;
+  // ignore: non_constant_identifier_names
+  set next_page(int nextPage) => _$this._next_page = nextPage;
 
   ListBuilder<SearchItem> _items;
   ListBuilder<SearchItem> get items =>

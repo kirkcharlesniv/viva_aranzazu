@@ -3,7 +3,7 @@ import 'package:viva_aranzazu/bloc/search/search_bloc.dart';
 import 'package:viva_aranzazu/widgets/dashboard/data_search.dart';
 
 class SearchButton extends StatelessWidget {
-  SearchBloc _searchBloc;
+  final SearchBloc _searchBloc;
   SearchButton(this._searchBloc);
 
   @override

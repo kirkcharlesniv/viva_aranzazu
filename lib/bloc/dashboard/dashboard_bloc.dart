@@ -31,22 +31,26 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   Stream<DashboardState> mapSearchInitiated(event) async* {
-    yield DashboardState.loading();
+    if (event.index == null) {
+      yield DashboardState.initial();
+    } else {
+      yield DashboardState.loading();
 
-    try {
-      final searchResult = await _repository.browseDashboard(event.index);
-      yield DashboardState.success(searchResult);
-    } on MessageError catch (e) {
-      yield DashboardState.failure(e.message);
-    } on NoDashboardResultsException catch (e) {
-      yield DashboardState.failure(e.message);
+      try {
+        final searchResult = await _repository.browseDashboard(event.index);
+        yield DashboardState.success(searchResult);
+      } on MessageError catch (e) {
+        yield DashboardState.failure(e.message);
+      } on NoDashboardResultsException catch (e) {
+        yield DashboardState.failure(e.message);
+      }
     }
   }
 
   Stream<DashboardState> mapFetchNextResultPage() async* {
     try {
       final nextPageResults = await _repository.fetchNextPage();
-      yield DashboardState.success(currentState.results + nextPageResults);
+      yield DashboardState.success(currentState.items + nextPageResults);
     } on NoNextPageTokenException catch (_) {
       yield currentState.rebuild((b) => b..hasReachedEndOfResults = true);
     } on BrowseNotInitiatedException catch (e) {

@@ -8,13 +8,12 @@ part 'dashboard_state.g.dart';
 abstract class DashboardState
     implements Built<DashboardState, DashboardStateBuilder> {
   bool get isLoading;
-  BuiltList<SearchItem> get results;
+  BuiltList<SearchItem> get items;
   String get error;
   bool get hasReachedEndOfResults;
 
-  bool get isInitial => !isLoading && results.isEmpty && error == '';
-  bool get isSuccessful =>
-      !isLoading && results.isNotEmpty && error == '';
+  bool get isInitial => !isLoading && items.isEmpty && error == '';
+  bool get isSuccessful => !isLoading && items.isNotEmpty && error == '';
 
   DashboardState._();
 
@@ -23,7 +22,7 @@ abstract class DashboardState
   factory DashboardState.initial() {
     return DashboardState((b) => b
       ..isLoading = false
-      ..results.replace(BuiltList<SearchItem>())
+      ..items.replace(BuiltList<SearchItem>())
       ..error = ''
       ..hasReachedEndOfResults = false);
   }
@@ -31,7 +30,7 @@ abstract class DashboardState
   factory DashboardState.loading() {
     return DashboardState((b) => b
       ..isLoading = true
-      ..results.replace(BuiltList<SearchItem>())
+      ..items.replace(BuiltList<SearchItem>())
       ..error = ''
       ..hasReachedEndOfResults = false);
   }
@@ -39,7 +38,7 @@ abstract class DashboardState
   factory DashboardState.failure(String error) {
     return DashboardState((b) => b
       ..isLoading = false
-      ..results.replace(BuiltList<SearchItem>())
+      ..items.replace(BuiltList<SearchItem>())
       ..error = error
       ..hasReachedEndOfResults = false);
   }
@@ -47,7 +46,7 @@ abstract class DashboardState
   factory DashboardState.success(BuiltList<SearchItem> resultList) {
     return DashboardState((b) => b
       ..isLoading = false
-      ..results.replace(resultList)
+      ..items.replace(resultList)
       ..error = ''
       ..hasReachedEndOfResults = false);
   }

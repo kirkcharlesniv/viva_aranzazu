@@ -10,7 +10,7 @@ class _$DashboardState extends DashboardState {
   @override
   final bool isLoading;
   @override
-  final BuiltList<SearchItem> results;
+  final BuiltList<SearchItem> items;
   @override
   final String error;
   @override
@@ -20,13 +20,13 @@ class _$DashboardState extends DashboardState {
       (new DashboardStateBuilder()..update(updates)).build();
 
   _$DashboardState._(
-      {this.isLoading, this.results, this.error, this.hasReachedEndOfResults})
+      {this.isLoading, this.items, this.error, this.hasReachedEndOfResults})
       : super._() {
     if (isLoading == null) {
       throw new BuiltValueNullFieldError('DashboardState', 'isLoading');
     }
-    if (results == null) {
-      throw new BuiltValueNullFieldError('DashboardState', 'results');
+    if (items == null) {
+      throw new BuiltValueNullFieldError('DashboardState', 'items');
     }
     if (error == null) {
       throw new BuiltValueNullFieldError('DashboardState', 'error');
@@ -50,7 +50,7 @@ class _$DashboardState extends DashboardState {
     if (identical(other, this)) return true;
     return other is DashboardState &&
         isLoading == other.isLoading &&
-        results == other.results &&
+        items == other.items &&
         error == other.error &&
         hasReachedEndOfResults == other.hasReachedEndOfResults;
   }
@@ -58,7 +58,7 @@ class _$DashboardState extends DashboardState {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, isLoading.hashCode), results.hashCode), error.hashCode),
+        $jc($jc($jc(0, isLoading.hashCode), items.hashCode), error.hashCode),
         hasReachedEndOfResults.hashCode));
   }
 
@@ -66,7 +66,7 @@ class _$DashboardState extends DashboardState {
   String toString() {
     return (newBuiltValueToStringHelper('DashboardState')
           ..add('isLoading', isLoading)
-          ..add('results', results)
+          ..add('items', items)
           ..add('error', error)
           ..add('hasReachedEndOfResults', hasReachedEndOfResults))
         .toString();
@@ -81,10 +81,10 @@ class DashboardStateBuilder
   bool get isLoading => _$this._isLoading;
   set isLoading(bool isLoading) => _$this._isLoading = isLoading;
 
-  ListBuilder<SearchItem> _results;
-  ListBuilder<SearchItem> get results =>
-      _$this._results ??= new ListBuilder<SearchItem>();
-  set results(ListBuilder<SearchItem> results) => _$this._results = results;
+  ListBuilder<SearchItem> _items;
+  ListBuilder<SearchItem> get items =>
+      _$this._items ??= new ListBuilder<SearchItem>();
+  set items(ListBuilder<SearchItem> items) => _$this._items = items;
 
   String _error;
   String get error => _$this._error;
@@ -100,7 +100,7 @@ class DashboardStateBuilder
   DashboardStateBuilder get _$this {
     if (_$v != null) {
       _isLoading = _$v.isLoading;
-      _results = _$v.results?.toBuilder();
+      _items = _$v.items?.toBuilder();
       _error = _$v.error;
       _hasReachedEndOfResults = _$v.hasReachedEndOfResults;
       _$v = null;
@@ -128,14 +128,14 @@ class DashboardStateBuilder
       _$result = _$v ??
           new _$DashboardState._(
               isLoading: isLoading,
-              results: results.build(),
+              items: items.build(),
               error: error,
               hasReachedEndOfResults: hasReachedEndOfResults);
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'results';
-        results.build();
+        _$failedField = 'items';
+        items.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'DashboardState', _$failedField, e.toString());
