@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:viva_aranzazu/bloc/search/bloc.dart';
 import 'package:viva_aranzazu/model/search/SearchItem.dart';
-import 'package:viva_aranzazu/widgets/templates/ListItemCard.dart';
 import 'package:viva_aranzazu/widgets/search/centered_message.dart';
+import 'package:viva_aranzazu/widgets/templates/Detail.dart';
+import 'package:viva_aranzazu/widgets/templates/ListItemCard.dart';
 
 class DataSearch extends SearchDelegate<String> {
   final _scrollController = ScrollController();
@@ -104,7 +105,7 @@ class DataSearch extends SearchDelegate<String> {
               ? (state.searchResults.length < 10
                   ? null
                   : _buildLoaderListItem())
-              : _buildVideoListItem(state.searchResults[index]);
+              : _buildVideoListItem(state.searchResults[index], context);
         },
       ),
     );
@@ -126,19 +127,16 @@ class DataSearch extends SearchDelegate<String> {
     return false;
   }
 
-  Widget _buildVideoListItem(SearchItem searchItem) {
+  Widget _buildVideoListItem(SearchItem searchItem, BuildContext context) {
     return GestureDetector(
       child: ListItemCard(searchItem),
       onTap: () {
-        // TODO: add detail view
-//        Navigator.push(
-//          context,
-//          MaterialPageRoute(builder: (_) {
-//            return DetailPage(
-//              videoId: searchItem.id.videoId,
-//            );
-//          }),
-//        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) {
+            return DetailPage(searchItem.id, searchItem);
+          }),
+        );
       },
     );
   }

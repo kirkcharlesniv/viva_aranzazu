@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:viva_aranzazu/bloc/dashboard/bloc.dart';
 import 'package:viva_aranzazu/model/search/SearchItem.dart';
 import 'package:viva_aranzazu/widgets/search/centered_message.dart';
+import 'package:viva_aranzazu/widgets/templates/Detail.dart';
 import 'package:viva_aranzazu/widgets/templates/ListItemCard.dart';
 
 class DataDashboard extends StatelessWidget {
@@ -49,7 +50,7 @@ class DataDashboard extends StatelessWidget {
         itemBuilder: (context, index) {
           return index >= state.items.length
               ? (state.items.length < 10 ? null : _buildLoaderListItem())
-              : _buildVideoListItem(state.items[index]);
+              : _buildListItem(state.items[index], context);
         },
       ),
     );
@@ -71,11 +72,16 @@ class DataDashboard extends StatelessWidget {
     return false;
   }
 
-  Widget _buildVideoListItem(SearchItem searchItem) {
+  Widget _buildListItem(SearchItem searchItem, BuildContext context) {
     return GestureDetector(
       child: ListItemCard(searchItem),
       onTap: () {
-        // TODO: add detail view\
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) {
+            return DetailPage(searchItem.id, searchItem);
+          }),
+        );
       },
     );
   }
