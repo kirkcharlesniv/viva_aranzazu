@@ -24,7 +24,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: <Widget>[
                     Text(
                       'Hello',
-                      style: TextStyle(fontSize: 70.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 70.0, fontWeight: FontWeight.bold),
                     ),
                     Row(
                       children: <Widget>[
