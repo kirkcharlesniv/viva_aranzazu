@@ -15,82 +15,81 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-          children: <Widget>[
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Hello',
+                  style: TextStyle(fontSize: 70.0, fontWeight: FontWeight.bold),
+                ),
+                Row(
                   children: <Widget>[
                     Text(
-                      'Hello',
+                      'There',
                       style: TextStyle(
                           fontSize: 70.0, fontWeight: FontWeight.bold),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          'There',
-                          style: TextStyle(
-                              fontSize: 70.0, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '.',
-                          style: TextStyle(
-                              fontSize: 70.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.lightBlueAccent),
-                        )
-                      ],
+                    Text(
+                      '.',
+                      style: TextStyle(
+                          fontSize: 70.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.lightBlueAccent),
                     )
                   ],
+                )
+              ],
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 0, left: 20, right: 20),
+          child: Column(
+            children: <Widget>[
+              Form(
+                key: formKey,
+                autovalidate: _autoValidate,
+                child: Column(
+                  children: buildInputs(),
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 0, left: 20, right: 20),
-              child: Column(
-                children: <Widget>[
-                  Form(
-                    key: formKey,
-                    autovalidate: _autoValidate,
-                    child: Column(
-                      children: buildInputs(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 60,
-                  ),
-                  GestureDetector(
-                    child: Container(
-                      height: 50,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.lightBlue,
-                        child: Center(
-                          child: Text(
-                            "REGISTER",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Montserrat"),
-                          ),
-                        ),
+              SizedBox(
+                height: 60,
+              ),
+              GestureDetector(
+                child: Container(
+                  height: 50,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.lightBlue,
+                    child: Center(
+                      child: Text(
+                        "REGISTER",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Montserrat"),
                       ),
                     ),
-                    onTap: () {
-                      if (formKey.currentState.validate()) {
-                        submit();
-                      } else {
-                        _autoValidate = true;
-                      }
-                    },
-                  )
-                ],
-              ),
-            ),
-          ],
-        ));
+                  ),
+                ),
+                onTap: () {
+                  if (formKey.currentState.validate()) {
+                    submit();
+                  } else {
+                    _autoValidate = true;
+                  }
+                },
+              )
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 
   List<Widget> buildInputs() {
@@ -142,9 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
     form.save();
 
     try {
-      final authService = Provider
-          .of(context)
-          .authService;
+      final authService = Provider.of(context).authService;
       String uid = await authService.createUserWithEmailAndPassword(
           _email, _password, _name);
       print("Signed in with ID $uid");
