@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:viva_aranzazu/services/auth_service.dart';
+import 'package:viva_aranzazu/widgets/authentication/provider.dart';
 
 class ProfileImage extends StatelessWidget {
   @override
@@ -8,7 +10,16 @@ class ProfileImage extends StatelessWidget {
         padding:
             const EdgeInsets.only(right: 16, bottom: 10, top: 15, left: 16),
         child: GestureDetector(
-          onTap: () {},
+          onTap: () async {
+            try {
+              AuthService auth = Provider
+                  .of(context)
+                  .authService;
+              await auth.signOut();
+            } catch (e) {
+              print(e);
+            }
+          },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: CachedNetworkImage(

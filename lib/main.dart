@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viva_aranzazu/injection_container.dart';
+import 'package:viva_aranzazu/services/auth_service.dart';
 import 'package:viva_aranzazu/widgets/authentication/login.dart';
+import 'package:viva_aranzazu/widgets/authentication/provider.dart';
 import 'package:viva_aranzazu/widgets/authentication/signup.dart';
+import 'package:viva_aranzazu/widgets/dashboard_page.dart';
 import 'package:viva_aranzazu/widgets/onboarding.dart';
 
 void main() {
@@ -15,19 +18,41 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      routes: <String, WidgetBuilder>{
-        '/signup': (BuildContext context) => new RegisterPage(),
-      },
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primaryColor: Colors.red.shade600,
-        accentColor: Colors.redAccent.shade400,
-      ),
+    return Provider(
+      authService: AuthService(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        routes: <String, WidgetBuilder>{
+          '/signup': (BuildContext context) => new RegisterPage(),
+          '/home': (BuildContext context) => new DashboardPage()
+        },
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: Colors.red.shade600,
+          accentColor: Colors.redAccent.shade400,
+        ),
 //      home: LoginPage(),
-      home: Splash(),
+        home: HomeController(),
+      ),
     );
+  }
+}
+
+class HomeController extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final AuthService authService = Provider
+        .of(context)
+        .authService;
+    return StreamBuilder(
+        stream: authService.onAuthStateChanged,
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            final bool signedIn = snapshot.hasData;
+            return signedIn ? DashboardPage() : LoginPage();
+          }
+          return CircularProgressIndicator();
+        });
   }
 }
 
