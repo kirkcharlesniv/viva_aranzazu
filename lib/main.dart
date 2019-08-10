@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viva_aranzazu/injection_container.dart';
@@ -31,8 +29,34 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.red.shade600,
           accentColor: Colors.redAccent.shade400,
         ),
-//      home: LoginPage(),
-        home: HomeController(),
+        home: new FutureBuilder<SharedPreferences>(
+          future: SharedPreferences.getInstance(),
+          builder: (BuildContext context,
+              AsyncSnapshot<SharedPreferences> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              default:
+                if (!snapshot.hasError) {
+                  return snapshot.data.getBool("welcome") != null
+                      ? new HomeController()
+                      : new OnBoardingPage();
+                } else {
+                  print(snapshot.error);
+                  return new Scaffold(
+                    body: Center(
+                      child: Text(snapshot.error),
+                    ),
+                  );
+                }
+            }
+          },
+        ),
       ),
     );
   }
@@ -53,42 +77,5 @@ class HomeController extends StatelessWidget {
           }
           return CircularProgressIndicator();
         });
-  }
-}
-
-class Splash extends StatefulWidget {
-  @override
-  SplashState createState() => new SplashState();
-}
-
-class SplashState extends State<Splash> {
-  Future checkFirstSeen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _seen = (prefs.getBool('seen') ?? false);
-    if (_seen) {
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new LoginPage()));
-    } else {
-      prefs.setBool('seen', true);
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new OnBoardingPage()));
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    new Timer(new Duration(milliseconds: 20), () {
-      checkFirstSeen();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new Center(
-        child: new Text('Loading...'),
-      ),
-    );
   }
 }

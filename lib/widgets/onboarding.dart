@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -40,9 +41,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         setState(() {
           this._slideIndex = index;
         });
-        if (_slideIndex == icons.length - 1) {
-          print('reached last page');
-        }
       },
       loop: false,
       controller: controller,
@@ -127,7 +125,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     child: GestureDetector(
                       onTap: () {
                         if (_slideIndex == icons.length - 1) {
-                          print('clicked last page button');
+                          setWelcomeTrue();
+                          Navigator.of(context).pushReplacementNamed('/signup');
                         } else {
                           controller.move(_slideIndex + 1);
                         }
@@ -164,6 +163,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
     return Scaffold(
         backgroundColor: Colors.transparent, body: transformerPageView);
+  }
+
+  Future setWelcomeTrue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('welcome', true);
   }
 }
 
