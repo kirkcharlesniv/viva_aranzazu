@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "826302880092",
+    "firebase_url": "https://viva-aranzazu.firebaseio.com",
+    "project_id": "viva-aranzazu",
+    "storage_bucket": "viva-aranzazu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826302880092:android:b3d6b201aac2f17a",
+        "android_client_info": {
+          "package_name": "ph.aranzazushrine.viva_aranzazu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826302880092-arlcu1p5jh10aa3spf4gp0222ormcnov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABbtERLOysBEX_qJeQqf-Ls9FsXD_Jwtc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826302880092-arlcu1p5jh10aa3spf4gp0222ormcnov.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "826302880092-0u5sgidogcvkljofqjoagn30vvtril7e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ph.aranzazushrine.vivaAranzazu"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
