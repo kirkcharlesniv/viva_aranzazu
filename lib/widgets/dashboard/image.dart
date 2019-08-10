@@ -12,9 +12,7 @@ class ProfileImage extends StatelessWidget {
         child: GestureDetector(
           onTap: () async {
             try {
-              AuthService auth = Provider
-                  .of(context)
-                  .authService;
+              AuthService auth = Provider.of(context).authService;
               await auth.signOut();
             } catch (e) {
               print(e);
